@@ -1,7 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteUser } from "../redux/userReducer";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const users = useSelector((state) => state.users);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleDelete = (id) => {
+        dispatch(deleteUser);
+        navigate(0);
+    }
+
     return (
         <div  className="container">
             <h2>Simple Crud App With Redux</h2>
@@ -16,10 +28,20 @@ const Home = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <td>
-                        {/* <Link to={`/edit/${users.id}`}  className='btn btn-sm btn-primary'>Edit</Link>
-                        <Link onChange={() => handleDelet(user.id)} className='btn btn-sm btn-danger ms-2'>Delete</Link> */}
-                    </td>
+                    {
+                        users.map((user, index) => (
+                            <tr key={index}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>
+                                    <Link to={`/edit/${user.id}`}  className='btn btn-sm btn-primary'>Edit</Link>
+                                    <Link onClick={()=>handleDelete(user.id)} className='btn btn-sm btn-danger ms-2'>Delete</Link>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                   
                 </tbody>
             </table>
         </div>
